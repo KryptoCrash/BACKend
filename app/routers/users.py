@@ -34,18 +34,9 @@ def get_all_user_data(user = Depends(get_current_user)):
     # 3. Calculate score for each record
     result = []
     for record in data:
-        payload = record.get("payload", {})
-        # Handle string payload if necessary (though Supabase usually returns dict for JSONB)
-        if isinstance(payload, str):
-            import json
-            try:
-                payload = json.loads(payload)
-            except:
-                payload = {}
-        
-        # Calculate score: simply map potentiometer_value to score
-        val = payload.get("potentiometer_value", 0.0)
-        score = float(val) if isinstance(val, (int, float)) else 0.0
+        # Use the utility function to calculate score for this single record
+        # calculate_score expects a list of records
+        score = calculate_score([record])
         
         # Add score to the record so it matches TelemetryResponse schema
         record["score"] = score
