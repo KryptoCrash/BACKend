@@ -10,6 +10,8 @@ class DeviceCreate(DeviceBase):
     pass
 
 class DeviceResponse(DeviceBase):
-    device_id: int
-    name: str
     owner_id: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

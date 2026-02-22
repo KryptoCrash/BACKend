@@ -54,7 +54,7 @@ def main():
     headers = {"Authorization": f"Bearer {token}"}
     
     # 2. Create a Device
-    device_id = 63
+    device_id = "63"
     device_payload = {
         "device_id": device_id,
         "name": "My Test Raspberry Pi"
