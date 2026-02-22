@@ -1,3 +1,4 @@
+from re import S
 from typing import List, Dict, Any
 
 def calculate_score(telemetry_data: List[Dict[str, Any]]) -> float:
@@ -22,8 +23,9 @@ def calculate_score(telemetry_data: List[Dict[str, Any]]) -> float:
                 payload = {}
                 
         val = payload.get("potentiometer_value", 0.0)
+        score = (8190 - val) / 8190
         if isinstance(val, (int, float)):
-            total_score += val
+            total_score += score
             count += 1
             
     if count == 0:
