@@ -77,28 +77,24 @@ def main():
     # Looking at telemetry.py: @router.post("/ingest/{device_id}") has NO dependency on get_current_user.
     # So we don't send headers here to simulate the RPI.
     for i in range(4):
-        # Open the file in binary mode
-        with open("test_image.png", "rb") as f:
-            # The key 'file' matches the parameter name in the FastAPI route
-            files = {"file": ("test_image.png", f, "multipart/form-data")}
-            
-            telemetry_payload = {
-                "potentiometer_value": 0.75,
-                "timestamp": "2023-10-27T10:00:00Z"
-            }
-            
-            print(f"\nIngesting data for '{device_id}'...")
-            # Send payload as JSON string in form data
-            response = requests.post(
-                f"{API_URL}/ingest/{device_id}", 
-                data={"payload": json.dumps(telemetry_payload)}, 
-                files=files
-            )
+        telemetry_payload = {
+            "potentiometer_value": 0.75,
+            "image_data": "https://example.com/image.jpg",
+            "timestamp": "2023-10-27T10:00:00Z"
+        }
         
-            if response.status_code == 200:
-                print("Data ingested successfully:", response.json())
-            else:
-                print("Failed to ingest data:", response.status_code, response.text)
+        print(f"\nIngesting data for '{device_id}'...")
+        # The schema expects the body to be wrapped in "payload" key? 
+        # Checking app/routers/telemetry.py: 
+        # def ingest_data(device_id: str, payload: TelemetryPayload):
+        # So it expects the fields directly in the body matching TelemetryPayload.
+        
+        response = requests.post(f"{API_URL}/ingest/{device_id}", json=telemetry_payload)
+        
+        if response.status_code == 200:
+            print("Data ingested successfully:", response.json())
+        else:
+            print("Failed to ingest data:", response.status_code, response.text)
 
     # 4. Get Device Data (User Auth Required)
     print(f"\nRetrieving data for '{device_id}'...")

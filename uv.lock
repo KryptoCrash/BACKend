@@ -42,7 +42,6 @@ dependencies = [
     { name = "openai" },
     { name = "pydantic" },
     { name = "python-dotenv" },
-    { name = "python-multipart" },
     { name = "supabase" },
     { name = "uvicorn" },
 ]
@@ -54,7 +53,6 @@ requires-dist = [
     { name = "openai", specifier = ">=2.21.0" },
     { name = "pydantic", specifier = ">=2.12.5" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
-    { name = "python-multipart", specifier = ">=0.0.22" },
     { name = "supabase", specifier = ">=2.28.0" },
     { name = "uvicorn", specifier = ">=0.41.0" },
 ]
