@@ -3,7 +3,7 @@ from typing import List
 from app.core.security import get_current_user
 from app.core.database import supabase
 from app.schemas.device import DeviceCreate, DeviceResponse
-
+from datetime import datetime
 router = APIRouter(
     prefix="/devices",
     tags=["devices"],
@@ -27,7 +27,7 @@ def create_device(device: DeviceCreate, user = Depends(get_current_user)):
     
     if not response.data:
         raise HTTPException(status_code=500, detail="Failed to create device")
-        
+    
     return response.data[0]
 
 @router.get("/list", response_model=List[DeviceResponse])
