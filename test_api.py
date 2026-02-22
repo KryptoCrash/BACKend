@@ -110,15 +110,26 @@ def main():
 
     # 5. Get All User Data (User Auth Required)
     print(f"\nRetrieving ALL data for user...")
-    response = requests.get(f"{API_URL}/devices/get_all_data", headers=headers)
+    response = requests.get(f"{API_URL}/users/data", headers=headers)
     
     if response.status_code == 200:
         data = response.json()
         print(f"Retrieved {len(data)} total records across all devices.")
         if len(data) > 0:
-            print("All records:", data)
+            print("Latest 2 records:", data[:2])
     else:
         print("Failed to retrieve all data:", response.status_code, response.text)
+
+    # 6. Get Leaderboard
+    print(f"\nRetrieving Leaderboard...")
+    response = requests.get(f"{API_URL}/users/leaderboard", headers=headers)
+    
+    if response.status_code == 200:
+        data = response.json()
+        print("Leaderboard:")
+        print(json.dumps(data, indent=2))
+    else:
+        print("Failed to retrieve leaderboard:", response.status_code, response.text)
 
 if __name__ == "__main__":
     main()
