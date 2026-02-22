@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import List, Dict, Any
 from app.core.security import get_current_user
 from app.core.database import supabase
@@ -54,7 +54,7 @@ def get_all_user_data(user = Depends(get_current_user)):
     return result
 
 @router.get("/leaderboard")
-def get_leaderboard():
+def get_leaderboard(limit: int = Query(20, ge=1, le=100)):
     # 1. Fetch all devices using admin client (bypass RLS)
     devices_resp = supabase_admin.table("devices").select("device_id, owner_id").execute()
     if not devices_resp.data:
@@ -107,4 +107,4 @@ def get_leaderboard():
     # Sort by score descending
     leaderboard.sort(key=lambda x: x["score"], reverse=True)
     
-    return leaderboard
+    return leaderboard[:limit]
