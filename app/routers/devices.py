@@ -44,13 +44,3 @@ def delete_device(device_id: str, user = Depends(get_current_user)):
         
     supabase.table("devices").delete().eq("device_id", device_id).execute()
     return {"message": "Device deleted successfully"}
-
-@router.get("/get/{device_id}/data")
-def get_device_data(device_id: str, user = Depends(get_current_user)):
-    # Verify ownership
-    device = supabase.table("devices").select("*").eq("device_id", device_id).eq("owner_id", user.id).execute()
-    if not device.data:
-        raise HTTPException(status_code=404, detail="Device not found or not owned by user")
-        
-    response = supabase.table("telemetry").select("*").eq("device_id", device_id).order("created_at", desc=True).execute()
-    return response.data
