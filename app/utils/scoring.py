@@ -23,7 +23,6 @@ def calculate_score(telemetry_data: List[Dict[str, Any]]) -> float:
                 payload = {}
                 
         val = payload.get("potentiometer_value", 0.0)
-        print(f"val: {val}")
         score = (8190 - val) / 8190
         if isinstance(val, (int, float)):
             total_score += score
