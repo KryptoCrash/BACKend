@@ -54,3 +54,19 @@ def get_device_data(device_id: str, user = Depends(get_current_user)):
         
     response = supabase.table("telemetry").select("*").eq("device_id", device_id).order("created_at", desc=True).execute()
     return response.data
+
+@router.get("/get_all_data")
+def get_all_user_data(user = Depends(get_current_user)):
+    # 1. Get all device IDs owned by the user
+    devices_response = supabase.table("devices").select("device_id").eq("owner_id", user.id).execute()
+    
+    if not devices_response.data:
+        return []
+        
+    device_ids = [d["device_id"] for d in devices_response.data]
+    
+    # 2. Fetch telemetry for all these devices
+    # Using the "in" filter to match any of the device IDs
+    response = supabase.table("telemetry").select("*").in_("device_id", device_ids).order("created_at", desc=True).execute()
+    
+    return response.data

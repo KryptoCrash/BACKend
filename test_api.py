@@ -108,5 +108,17 @@ def main():
     else:
         print("Failed to retrieve data:", response.status_code, response.text)
 
+    # 5. Get All User Data (User Auth Required)
+    print(f"\nRetrieving ALL data for user...")
+    response = requests.get(f"{API_URL}/devices/get_all_data", headers=headers)
+    
+    if response.status_code == 200:
+        data = response.json()
+        print(f"Retrieved {len(data)} total records across all devices.")
+        if len(data) > 0:
+            print("All records:", data)
+    else:
+        print("Failed to retrieve all data:", response.status_code, response.text)
+
 if __name__ == "__main__":
     main()
